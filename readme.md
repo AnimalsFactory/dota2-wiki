@@ -60,25 +60,29 @@
    ```bash
    git clone https://github.com/AnimalsFactory/dota2-wiki.git
    cd dota2-wiki
-Создайте виртуальное окружение (рекомендуется):
+
+2. Создайте виртуальное окружение (рекомендуется):
 
 bash
 python -m venv venv
 source venv/bin/activate      # Linux/macOS
 venv\Scripts\activate         # Windows
-Установите зависимости:
+
+3. Установите зависимости:
 
 bash
 pip install -r requirements.txt
-Запустите приложение:
+
+4. Запустите приложение:
 
 bash
 python app.py
-По умолчанию сервер запустится на http://localhost:5001
+
+5. По умолчанию сервер запустится на http://localhost:5001
 
 Откройте в браузере и пользуйтесь!
 
-📁 Структура проекта
+## 📁 Структура проекта
 text
 dota2-wiki/
 ├── app.py                     # Главный файл приложения
@@ -113,7 +117,8 @@ dota2-wiki/
 │   └── 500.html
 └── data/                      # Создаётся автоматически при запуске
     └── dota2.db               # SQLite база данных
-📦 Деплой на Render
+
+## 📦 Деплой на Render
 Проект успешно развёрнут на Render (бесплатный тариф).
 Конфигурация:
 
@@ -127,7 +132,7 @@ Python Version: 3.12.9 (задано в runtime.txt)
 
 При необходимости вы можете развернуть свой собственный экземпляр, используя ту же конфигурацию.
 
-⏰ Keep-Alive (борьба со сном)
+## ⏰ Keep-Alive (борьба со сном)
 На бесплатном тарифе Render приложение засыпает после 15 минут бездействия.
 Для поддержания активности используется cron-job.org — сервис, который отправляет GET-запрос на сайт каждые 5 минут.
 
@@ -139,7 +144,7 @@ URL: https://dota2-factory.onrender.com/
 
 Благодаря этому сайт всегда доступен без задержек при первом открытии.
 
-👨‍💻 Автор
+## 👨‍💻 Автор
 AnimalsFactory (MKeynes aka Larry, aka Lester)
 
 GitHub: AnimalsFactory
