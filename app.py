@@ -10,7 +10,7 @@ from data.heroes_data import HEROES_LIST, get_hero_description, get_hero_image_n
 from data.hero_abilities import HERO_ABILITIES
 from data.content_data import CONTENT
 from data.facts_data import get_all_facts
-from data.quiz_questions import QUESTIONS, get_questions_by_category, is_answer_correct
+from data.quiz_questions import get_questions_by_category, is_answer_correct
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dota2_secret_key_2026')
