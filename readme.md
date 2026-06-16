@@ -20,7 +20,6 @@
 - [📁 Структура проекта](#-структура-проекта)
 - [📦 Деплой на Render](#-деплой-на-render)
 - [⏰ Keep-Alive (борьба со сном)](#-keep-alive-борьба-со-сном)
-- [📸 Скриншоты](#-скриншоты)
 - [👨‍💻 Автор](#-автор)
 
 ---
@@ -61,24 +60,26 @@
    ```bash
    git clone https://github.com/AnimalsFactory/dota2-wiki.git
    cd dota2-wiki
+Создайте виртуальное окружение (рекомендуется):
 
-2. Создайте виртуальное окружение:
-   python -m venv venv
-   source venv/bin/activate      # Linux/macOS
-   venv\Scripts\activate         # Windows
+bash
+python -m venv venv
+source venv/bin/activate      # Linux/macOS
+venv\Scripts\activate         # Windows
+Установите зависимости:
 
-3. Установите зависимости:
-   pip install -r requirements.txt
+bash
+pip install -r requirements.txt
+Запустите приложение:
 
-4. Запустите приложение:
-   python app.py
+bash
+python app.py
 По умолчанию сервер запустится на http://localhost:5001
 
-5. Профит, пользуйтесь! 
-
-
+Откройте в браузере и пользуйтесь!
 
 📁 Структура проекта
+text
 dota2-wiki/
 ├── app.py                     # Главный файл приложения
 ├── database.py                # Работа с SQLite (пользователи, заметки, избранное)
@@ -112,11 +113,37 @@ dota2-wiki/
 │   └── 500.html
 └── data/                      # Создаётся автоматически при запуске
     └── dota2.db               # SQLite база данных
+📦 Деплой на Render
+Проект успешно развёрнут на Render (бесплатный тариф).
+Конфигурация:
 
+Build Command: pip install -r requirements.txt
 
-👨‍💻 Авторство:
+Start Command: gunicorn app:app
+
+Python Version: 3.12.9 (задано в runtime.txt)
+
+Статика: обслуживается через Whitenoise
+
+При необходимости вы можете развернуть свой собственный экземпляр, используя ту же конфигурацию.
+
+⏰ Keep-Alive (борьба со сном)
+На бесплатном тарифе Render приложение засыпает после 15 минут бездействия.
+Для поддержания активности используется cron-job.org — сервис, который отправляет GET-запрос на сайт каждые 5 минут.
+
+Ссылка на задание: cron-job.org
+
+Интервал: */5 * * * *
+
+URL: https://dota2-factory.onrender.com/
+
+Благодаря этому сайт всегда доступен без задержек при первом открытии.
+
+👨‍💻 Автор
 AnimalsFactory (MKeynes aka Larry, aka Lester)
 
 GitHub: AnimalsFactory
 
-Проект разработан в учебных целях для создания MVP ( минимально жизнеспособного продукта).
+Проект разработан в учебных целях для создания MVP (минимально жизнеспособного продукта).
+
+🌟 Если вам понравился проект, поставьте звёздочку на GitHub!
