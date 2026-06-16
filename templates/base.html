@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dota 2 — Справочник{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="https://www.dota2.com/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <a href="{{ url_for('index') }}" class="logo-link" aria-label="На главную">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Dota 2" class="logo-img">
+                </a>
+            </div>
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-btn">🌙</button>
+                <span class="guest-info">👤 {% if user %}{{ user.username }}{% else %}Гость{% endif %}</span>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="nav">
+        <div class="container">
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('index') }}">🏠 Главная</a></li>
+                <li><a href="{{ url_for('section', section_name='history') }}">📜 История</a></li>
+                <li><a href="{{ url_for('section', section_name='heroes') }}">⚔️ Герои</a></li>
+                <li><a href="{{ url_for('section', section_name='guide') }}">📖 Инструкция</a></li>
+                <li><a href="{{ url_for('facts') }}">📌 Факты</a></li>
+                <li><a href="{{ url_for('quiz') }}">🧠 Викторина</a></li>
+                <li><a href="{{ url_for('guest_cabinet') }}">👤 Мой кабинет</a></li>
+                {% if user %}
+                    <li><a href="{{ url_for('logout') }}">🚪 Выйти</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">🔑 Вход</a></li>
+                    <li><a href="{{ url_for('register') }}">📝 Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 Справочник Dota 2 | Учебный проект</p>
+            <p>Источники: <a href="https://www.dota2.com" target="_blank">Официальный сайт</a>, <a href="https://dota2.fandom.com" target="_blank">Dota 2 Wiki</a></p>
+            <p>⚔️ «Мир Dota огромен — исследуй его вместе с нами!»</p>
+        </div>
+    </footer>
+
+    <script>
+        // Переключение темы
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            themeToggle.textContent = '☀️';
+        } else {
+            body.classList.remove('light-theme');
+            themeToggle.textContent = '🌙';
+        }
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-theme');
+            if (body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = '☀️';
+                // Если пользователь залогинен, сохраняем тему в БД
+                {% if user %}
+                    fetch('{{ url_for('update_theme') }}', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        body: 'theme=light'
+                    });
+                {% endif %}
+            } else {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = '🌙';
+                {% if user %}
+                    fetch('{{ url_for('update_theme') }}', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                        body: 'theme=dark'
+                    });
+                {% endif %}
+            }
+        });
+
+        // Применяем тему из БД при загрузке (если пользователь залогинен)
+        {% if user and user.theme %}
+            const userTheme = "{{ user.theme }}";
+            if (userTheme === 'light') {
+                document.body.classList.add('light-theme');
+                document.getElementById('themeToggle').textContent = '☀️';
+            } else {
+                document.body.classList.remove('light-theme');
+                document.getElementById('themeToggle').textContent = '🌙';
+            }
+            localStorage.setItem('theme', userTheme);
+        {% endif %}
+    </script>
+</body>
+</html>

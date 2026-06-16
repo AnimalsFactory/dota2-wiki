@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Викторина по Dota 2{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-hero">
+        <h1>🧠 Викторина «Знаешь ли ты Dota?»</h1>
+        <p>Проверь свои знания о вселенной Dota 2!</p>
+    </div>
+
+    {% if show_rules %}
+        <!-- Блок с правилами -->
+        <div class="rules-block">
+            <h2>📋 Правила викторины</h2>
+            <ul>
+                <li>Вам будет предложено <strong>10 случайных вопросов</strong> (4 лёгких, 3 средних, 3 сложных).</li>
+                <li>Ответы нужно вводить текстом. <strong>Регистр и раскладка не важны</strong> — мы засчитываем даже с опечатками.</li>
+                <li>За каждый правильный ответ вы получаете <strong>1 балл</strong>.</li>
+                <li>После завершения вы увидите свой результат и правильные ответы на ошибки.</li>
+                <li>Результаты сохраняются в вашем <strong>личном кабинете</strong>.</li>
+            </ul>
+            <form action="{{ url_for('quiz_start') }}" method="POST">
+                <button type="submit" class="btn">🚀 Начать викторину</button>
+            </form>
+        </div>
+    {% elif quiz_result is defined %}
+        <!-- Блок с результатами -->
+        <div class="quiz-result-block">
+            <h3>🎉 Ваш результат: {{ quiz_result }} из {{ total }} баллов</h3>
+            {% if quiz_result >= 8 %}
+                <p>🌟 Отлично! Вы настоящий знаток Dota!</p>
+            {% elif quiz_result >= 5 %}
+                <p>📚 Неплохо! Повторите разделы справочника, чтобы улучшить результат.</p>
+            {% else %}
+                <p>💪 Начните с инструкции для новичков — и всё получится!</p>
+            {% endif %}
+            
+            <h4>📝 Подробный разбор</h4>
+            <ul class="result-details">
+                {% for item in results %}
+                <li class="{% if item.correct %}correct{% else %}incorrect{% endif %}">
+                    <div><strong>Вопрос:</strong> {{ item.question }}</div>
+                    <div><strong>Ваш ответ:</strong> {{ item.user_answer or '(пусто)' }}</div>
+                    {% if not item.correct %}
+                        <div><strong>Правильный ответ:</strong> {{ item.correct_answers }}</div>
+                    {% endif %}
+                    <span class="result-icon">{% if item.correct %}✅{% else %}❌{% endif %}</span>
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for('quiz') }}" class="btn">🔄 Пройти ещё раз</a>
+        </div>
+    {% else %}
+        <!-- Форма с вопросами -->
+        <form method="POST" action="{{ url_for('quiz_result') }}" class="quiz-form">
+            {% for q in questions %}
+            <div class="question">
+                <p><strong>{{ loop.index }}. {{ q.question }}</strong></p>
+                <input type="text" name="q{{ loop.index0 }}" placeholder="Введите ответ..." required>
+                <div class="hint">💡 Подсказка: {{ q.hint }}</div>
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn">✅ Завершить викторину</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

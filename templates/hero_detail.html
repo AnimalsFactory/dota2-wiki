@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{{ hero_name }} — Герой Dota 2{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-hero" style="background: linear-gradient(135deg, #2c3e50 0%, #8e44ad 100%);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <h1>⚔️ {{ hero_name }}</h1>
+            {% if user %}
+            <form action="{{ url_for('toggle_favorite', hero_name=hero_name) }}" method="POST">
+                <button type="submit" class="btn-fav">
+                    {% if is_favorite %}⭐ В избранном{% else %}☆ Добавить в избранное{% endif %}
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        <p>{{ description }}</p>
+    </div>
+
+    <div class="two-columns">
+        <div class="main-content">
+            <div class="section-text">
+                <div class="hero-full-image" style="text-align: center; margin-bottom: 1.5rem;">
+                    <img src="{{ image_url }}" 
+                         alt="{{ hero_name }}" 
+                         style="max-width: 100%; max-height: 400px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.3);"
+                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'400\' viewBox=\'0 0 400 400\'%3E%3Crect width=\'400\' height=\'400\' fill=\'%23222\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'60\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23fff\'%3E⚔️%3C/text%3E%3C/svg%3E'">
+                </div>
+
+                <!-- Блок способностей -->
+                {% if abilities %}
+                <h3>🔮 Способности</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                    {% for ability in abilities %}
+                    <div style="background: var(--bg-card, #1e1e1e); padding: 0.8rem; border-radius: 10px; border: 1px solid var(--border-color, #333);">
+                        <strong>{{ ability.name }}</strong>
+                        <p style="margin: 0.3rem 0 0; font-size: 0.9rem; color: var(--text-secondary, #ccc);">{{ ability.desc }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <h3>📖 Общая информация</h3>
+                <p><strong>{{ hero_name }}</strong> — {{ description }}</p>
+                <p>🔗 <a href="{{ official_url }}" target="_blank">Официальная страница героя на сайте Dota 2</a></p>
+                <hr>
+                <p><em>Здесь может быть расширенное описание, история и рекомендуемые сборки.</em></p>
+            </div>
+        </div>
+        <div class="sidebar">
+            <h3>💬 Моя заметка о герое</h3>
+            <form action="{{ url_for('add_note') }}" method="POST">
+                <input type="hidden" name="section" value="hero: {{ hero_name }}">
+                <input type="hidden" name="hero_name" value="{{ hero_name }}">
+                <textarea name="note" rows="4" placeholder="Напишите свои мысли об этом герое..." style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd;"></textarea>
+                <button type="submit" class="btn" style="margin-top: 0.5rem;">Сохранить заметку</button>
+            </form>
+            <hr>
+            <h3>📚 Полезные ссылки</h3>
+            <ul>
+                <li><a href="https://www.dota2.com" target="_blank">Официальный сайт</a></li>
+                <li><a href="https://dota2.fandom.com" target="_blank">Dota 2 Wiki</a></li>
+                <li><a href="https://www.dotabuff.com" target="_blank">Dotabuff</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

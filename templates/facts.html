@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Интересные факты о Dota 2{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-hero" style="background: linear-gradient(135deg, #2c3e50 0%, #e74c3c 100%);">
+        <h1>📌 Интересные факты о Dota 2</h1>
+        <p>Самые удивительные, забавные и невероятные факты об игре, героях и киберспорте.</p>
+        <p style="font-size: 0.9rem; opacity: 0.8;">Всего фактов: {{ facts|length }}</p>
+    </div>
+
+    <div class="facts-grid">
+        {% for fact in facts %}
+        <div class="fact-card">
+            <span class="fact-number">#{{ loop.index }}</span>
+            <p class="fact-text">{{ fact }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

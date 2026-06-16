@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Гостевой кабинет{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>👤 Гостевой кабинет</h1>
+    <p>Здесь сохраняются ваши посещения и заметки. Данные хранятся в вашем браузере.</p>
+    <p><a href="{{ url_for('login') }}">Войдите</a>, чтобы сохранять данные на сервере.</p>
+    
+    <div class="two-columns">
+        <div class="main-content">
+            <h2>🕒 История посещений</h2>
+            {% if history %}
+            <ul class="history-list">
+                {% for section_id, section_name in history %}
+                <li>
+                    <span>📖 {{ section_name }}</span>
+                    <a href="{{ url_for('section', section_name=section_id) }}" class="badge">Перейти</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Вы ещё не посещали разделы справочника. Начните путешествие с главной страницы!</p>
+            {% endif %}
+        </div>
+        
+        <div class="sidebar">
+            <h2>📝 Мои заметки</h2>
+            <form action="{{ url_for('add_note') }}" method="POST">
+                <input type="hidden" name="section" value="cabinet">
+                <textarea name="note" rows="3" placeholder="Напишите заметку..." style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd;"></textarea>
+                <button type="submit" class="btn" style="margin-top: 0.5rem;">➕ Добавить заметку</button>
+            </form>
+            
+            {% if notes %}
+            <ul class="notes-list" style="margin-top: 1rem;">
+                {% for note in notes|reverse %}
+                <li>
+                    <div>{{ note.text }}</div>
+                    <div class="timestamp">{{ note.timestamp }}</div>
+                    {% if note.section != 'cabinet' %}
+                    <div><small>Раздел: {{ note.section }}</small></div>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>У вас пока нет заметок.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

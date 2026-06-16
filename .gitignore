@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+venv/
+data/dota2.db
+*.db
+.DS_Store

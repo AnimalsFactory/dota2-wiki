@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Главная — Dota 2{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Главный баннер с картинкой и центрированным текстом -->
+    <div class="hero hero-centered" style="background-image: url('{{ url_for('static', filename='images/main_bg.jpg') }}');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content-center">
+            <h1>Добро пожаловать на поля сражений</h1>
+            <h1 class="hero-title-dota">DOTA 2</h1>
+            <p>Изучи историю, героев, механику и проверь себя в викторине!</p>
+        </div>
+    </div>
+    
+    <!-- Карточки разделов с картинками -->
+    <div class="section-cards">
+        <a href="{{ url_for('section', section_name='history') }}" class="card">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='images/history.jpg') }}" alt="История Dota">
+            </div>
+            <div class="card-content">
+                <h3>История Dota</h3>
+                <p>Как мод для Warcraft стал киберспортивной легендой</p>
+            </div>
+        </a>
+        
+        <a href="{{ url_for('section', section_name='heroes') }}" class="card">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='images/heroes.jpg') }}" alt="Герои Dota 2">
+            </div>
+            <div class="card-content">
+                <h3>Герои</h3>
+                <p>Роли, популярные герои, способности</p>
+            </div>
+        </a>
+        
+        <a href="{{ url_for('section', section_name='guide') }}" class="card">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='images/guide.jpg') }}" alt="Инструкция">
+            </div>
+            <div class="card-content">
+                <h3>Инструкция</h3>
+                <p>Пошаговый план для новичков и видеоуроки</p>
+            </div>
+        </a>
+
+        <a href="{{ url_for('facts') }}" class="card">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='images/facts.jpg') }}" alt="Интересные факты">
+            </div>
+            <div class="card-content">
+                <h3>📌 Интересные факты</h3>
+                <p>Самые удивительные факты о Dota 2</p>
+            </div>
+        </a>
+        
+        <a href="{{ url_for('quiz') }}" class="card">
+            <div class="card-image">
+                <img src="{{ url_for('static', filename='images/quiz.jpg') }}" alt="Викторина">
+            </div>
+            <div class="card-content">
+                <h3>Викторина</h3>
+                <p>Проверь свои знания о Dota 2</p>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Двухколоночный блок -->
+    <div class="two-columns">
+        <div class="main-content">
+            <h2>Добро пожаловать в справочник Dota 2!</h2>
+            <p>Здесь собрана самая важная информация об игре: от истории создания до современных турниров. Идеальный старт для новичков и полезное чтение для ветеранов.</p>
+            <p>💡 <strong>Знаете ли вы?</strong> Призовой фонд The International 2021 превысил $40 миллионов — это рекорд в истории киберспорта.</p>
+        </div>
+        <div class="sidebar">
+            <h3>⚡ О проекте</h3>
+            <p>Справочник создан фанатами для фанатов. Вся информация основана на официальных источниках и актуальна на 2026 год.</p>
+            <hr>
+            <h3>📌 Что вы найдёте:</h3>
+            <ul>
+                <li>Историю развития игры</li>
+                <li>Описание героев и ролей</li>
+                <li>Ключевые игровые механики</li>
+                <li>Видеоуроки</li>
+                <li>Интерактивную викторину</li>
+                <li>Интересные факты</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

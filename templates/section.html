@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Заголовок с фоновой картинкой (если есть) -->
+    {% if section.image %}
+    <div class="section-header-with-bg" style="background-image: url('{{ url_for('static', filename='images/' + section.image) }}');">
+        <div class="section-header-overlay"></div>
+        <h1 class="section-header-title">{{ section.title }}</h1>
+    </div>
+    {% else %}
+    <!-- Если картинки нет — обычный цветной хедер -->
+    <div class="section-hero">
+        <h1>{{ section.title }}</h1>
+    </div>
+    {% endif %}
+    
+    <!-- Основной контент в две колонки -->
+    <div class="two-columns">
+        <div class="main-content">
+            <div class="section-text">
+                {{ section.text | safe }}
+            </div>
+        </div>
+        <div class="sidebar">
+            <h3>💬 Моя заметка</h3>
+            <form action="{{ url_for('add_note') }}" method="POST">
+                <input type="hidden" name="section" value="{{ section_name }}">
+                <textarea name="note" rows="3" placeholder="Напишите свои мысли об этом разделе..." style="width: 100%; padding: 0.5rem; border-radius: 8px; border: 1px solid #ddd;"></textarea>
+                <button type="submit" class="btn" style="margin-top: 0.5rem;">Сохранить заметку</button>
+            </form>
+            
+            <hr>
+            <h3>📚 Полезные ссылки</h3>
+            <ul>
+                <li><a href="https://www.dota2.com" target="_blank">Официальный сайт</a></li>
+                <li><a href="https://dota2.fandom.com" target="_blank">Dota 2 Wiki</a></li>
+                <li><a href="https://www.dotabuff.com" target="_blank">Dotabuff</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
