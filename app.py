@@ -1,17 +1,22 @@
 from flask import Flask, render_template, request, session, redirect, url_for, abort, flash
 import json
 import uuid
+import os
 import database
 from werkzeug.security import check_password_hash
+from whitenoise import WhiteNoise
 
 from data.heroes_data import HEROES_LIST, get_hero_description, get_hero_image_name
 from data.hero_abilities import HERO_ABILITIES
 from data.content_data import CONTENT
 from data.facts_data import get_all_facts
-from data.quiz_questions import QUESTIONS, get_questions_by_category, is_answer_correct, normalize
+from data.quiz_questions import QUESTIONS, get_questions_by_category, is_answer_correct
 
 app = Flask(__name__)
-app.secret_key = "dota2_secret_key_2026"
+app.secret_key = os.environ.get('SECRET_KEY', 'dota2_secret_key_2026')
+
+# Настройка Whitenoise для раздачи статики
+app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/')
 
 database.init_db()
 
@@ -186,7 +191,6 @@ def toggle_favorite(hero_name):
 # ---------- ВИКТОРИНА ----------
 @app.route('/quiz')
 def quiz():
-    """Показывает правила или вопросы викторины."""
     if 'quiz_questions' in session:
         questions = session['quiz_questions']
         return render_template('quiz.html', questions=questions, user=get_user_data())
@@ -194,7 +198,6 @@ def quiz():
 
 @app.route('/quiz/start', methods=['POST'])
 def quiz_start():
-    """Генерирует случайные вопросы и сохраняет их в сессии."""
     import random
     easy = get_questions_by_category('easy')
     medium = get_questions_by_category('medium')
@@ -209,7 +212,6 @@ def quiz_start():
 
 @app.route('/quiz_result', methods=['POST'])
 def quiz_result():
-    """Проверяет ответы и показывает результат."""
     questions = session.get('quiz_questions', [])
     if not questions:
         return redirect(url_for('quiz'))
@@ -227,7 +229,6 @@ def quiz_result():
             'correct_answers': q['answers'][0] if q['answers'] else ''
         })
     total = len(questions)
-    # Сохраняем результат в заметки
     result_text = f"🎯 Результат викторины: {score} из {total} правильных ответов"
     if 'user_id' in session:
         database.add_user_note(session['user_id'], 'quiz', result_text)
@@ -313,5 +314,16 @@ def update_theme():
         database.update_user_theme(session['user_id'], theme)
     return redirect(request.referrer or url_for('guest_cabinet'))
 
+# ---------- ОБРАБОТЧИКИ ОШИБОК ----------
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
+# ---------- ЗАПУСК ----------
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port, debug=False)
